@@ -33,7 +33,7 @@ public class BotHQ {
 		targetsPathed = new ArrayList<MapLocation>();
 		
 		initMap();
-		//Channels.broadcastLocation(rc, Channels.armyTargetLocation, rallyP);
+		Broadcaster.broadcastLocation(rc, 10, rallyP); //broadcast rally location on channel 10
 		//pastrBuild = pRound();
 	}
 	public static void run(RobotController rc) throws GameActionException{
@@ -61,20 +61,20 @@ public class BotHQ {
 	{
 		map = new TerrainTile[width][height];
 		String line;
-		for (int i = height; --i >= 0;)
+		for (int j = 0; j <= height; j++)
 		{
 			line = "";
-			for (int j = width; --j >= 0;)
+			for (int i = 0; i<= width; i++)
 			{
-				map[j][i] = rc.senseTerrainTile(new MapLocation(j, i));
-				switch (map[j][i]){
+				map[i][j] = rc.senseTerrainTile(new MapLocation(i, j));
+				switch (map[i][j]){
 				case NORMAL:  line = line + ".";  break;
 				case ROAD:    line = line + "-";  break;
 				case VOID:    line = line + "X";  break;
 				case OFF_MAP: line = line + "X"; break;
 				}
 			}
-			System.out.println(line);
+			//System.out.println(line);
 		}
 		MapLocation[] locs = MapLocation.getAllMapLocationsWithinRadiusSq(enemyHQ, 25);
 		for (MapLocation l : locs)

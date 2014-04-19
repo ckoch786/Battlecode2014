@@ -27,7 +27,7 @@ public class BotSoldier {
 		//movement
 		Direction chosenDirection = allDirections[(int)(randall.nextDouble()*8)];
 		if(rc.isActive()&&rc.canMove(chosenDirection)){
-		rc.move(chosenDirection);
+		rc.move(Direction.NORTH);
 		}
 
 	}

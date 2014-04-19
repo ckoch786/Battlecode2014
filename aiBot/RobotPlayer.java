@@ -35,8 +35,7 @@ public class RobotPlayer
 		
 		while (true){ //run robots
 			try{
-				switch (rc.getType()){ //initialize Robots
-				
+				switch (rc.getType()){ 			
 				case HQ:      BotHQ.run(rc);      break;
 				case SOLDIER: BotSoldier.run(rc); break;
 				//case PASTR:   BotPastr.run(rc);   break;
