@@ -27,14 +27,14 @@ public class BotSoldier {
 		//movement
 		Direction chosenDirection = allDirections[(int)(randall.nextDouble()*8)];
 		if(rc.isActive()&&rc.canMove(chosenDirection)){
-		rc.move(Direction.NORTH);
+		rc.move(chosenDirection);
 		}
 
 	}
 
 	private static void tryToShoot() throws GameActionException {
 		//shooting
-		Robot[] enemyRobots = rc.senseNearbyGameObjects(Robot.class,10000,rc.getTeam().opponent());
+		Robot[] enemyRobots = rc.senseNearbyGameObjects(Robot.class,25,rc.getTeam().opponent());
 		if(enemyRobots.length>0){//if there are enemies
 			Robot anEnemy = enemyRobots[0];
 			RobotInfo anEnemyInfo;

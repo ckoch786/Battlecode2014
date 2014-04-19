@@ -61,10 +61,10 @@ public class BotHQ {
 	{
 		map = new TerrainTile[width][height];
 		String line;
-		for (int j = 0; j <= height; j++)
+		for (int j = 0; j < height; j++)
 		{
 			line = "";
-			for (int i = 0; i<= width; i++)
+			for (int i = 0; i< width; i++)
 			{
 				map[i][j] = rc.senseTerrainTile(new MapLocation(i, j));
 				switch (map[i][j]){
