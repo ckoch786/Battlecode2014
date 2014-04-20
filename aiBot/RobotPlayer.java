@@ -6,6 +6,7 @@ import java.util.*;
 
 public class RobotPlayer
 {
+	public static RobotController rc;
 	public static final Direction[] customDirections = new Direction[] {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.NORTH_EAST, Direction.SOUTH_EAST, Direction.NORTH_WEST, Direction.SOUTH_WEST };
 	public static MapLocation mapCenter;
 	public static int startTurn;
@@ -13,7 +14,8 @@ public class RobotPlayer
 	public static MapLocation enemyHQ;
 	public static MapLocation myHQ;
 	
-	public static void run (RobotController rc){
+	public static void run (RobotController myRC){
+		rc        = myRC;
 		mapCenter = new MapLocation(rc.getMapWidth()/2 , rc.getMapHeight() / 2);
 		startTurn = Clock.getRoundNum();
 		myTeam    = rc.getTeam();
@@ -41,6 +43,7 @@ public class RobotPlayer
 				//case PASTR:   BotPastr.run(rc);   break;
 				default: break;
 				}
+				rc.yield();
 			} catch (GameActionException e) {
 				//TODO Auto-generated catch block
 				e.printStackTrace();
