@@ -45,7 +45,7 @@ public class Pathing {
 		//post minion data to broadcast network
 		broadcastMinionData(rc);//1 round
 		//print the visual
-		runTests();
+		//runTests();
 	}
 	private static void broadcastMinionData(RobotController rc) throws GameActionException{
 		for(int x=0;x<width;x++){
@@ -174,30 +174,6 @@ public class Pathing {
 			nodeConnections.add(connectivity);
 		}
 	}
-	
-	private static void runTests(){//just storing some test code here
-		//LOOK AT MAP
-		int[][] nodeVisual = new int[width][height];
-		for(int x=0;x<width;x++){
-			for(int y=0;y<height;y++){
-				if(minionData[x][y]>1000){
-					nodeVisual[x][y]=-1;
-				}else{
-					if(getMapData(x,y)==1){
-						nodeVisual[x][y]=-1337;//there's a void
-					}else{
-						nodeVisual[x][y]=-9999;//generally open terrain
-					}
-				}
-			}
-		}
-		for(int i=0;i<nodes.size();i++){
-			MapLocation m = nodes.get(i);
-			nodeVisual[m.x][m.y] = i;
-		}
-		displayArray(nodeVisual);
-	}
-
 	private static Direction rotateDir(Direction d, int increment){
 		return dirs[(d.ordinal()+increment+8)%8];
 	}
@@ -210,7 +186,6 @@ public class Pathing {
 		}
 		return -1;
 	}
-
 	//NETWORKED PATHFINDING
 	private static ArrayList<MapLocation> findPath(int startNode, int endNode){
 		ArrayList<MapLocation> completePath = new ArrayList<MapLocation>();
@@ -362,43 +337,6 @@ public class Pathing {
 		while(outermost.size()>0){
 			outermost = fillFromVoids(outermost);
 			//System.out.println("filling from "+outermost.size()+" tiles...");
-		}
-		//display the voidID array
-		//displayArray(voidID);
-		//displayDirectionalArray(pathingData);
-	}
-	private static void displayArray(int[][] intArray){
-		for(int y = 0;y<intArray.length;y++){
-			String line = "";
-			for(int x=0;x<intArray[0].length;x++){
-				//line+=(voidID[x][y]==-1)?"_":".";
-				int i = intArray[x][y];
-				if(i==-1){//a path
-					line+="-";
-				}else if (i==-9999){//open terrain
-					line+=".";
-				}else if (i==-1337){//a void
-					line+="X";
-				}else{
-					line+=".";
-				}
-			}
-			System.out.println(line);
-		}
-	}
-	private static void displayDirectionalArray(Direction[][] pathingData){
-		String[] representations = {"^","/",">","\\","v","/","<","\\"};
-		for(int y = 0;y<pathingData.length;y++){
-			String line = "";
-			for(int x=0;x<pathingData[0].length;x++){
-				Direction d = pathingData[x][y];
-				if(d==null){
-					line+=" ";
-				}else{
-					line+=representations[d.ordinal()];
-				}
-			}
-			//System.out.println(line);
 		}
 	}
 	private static ArrayList<MapLocation> fillFromVoids(ArrayList<MapLocation> outermost){
