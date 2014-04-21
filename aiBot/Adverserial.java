@@ -2,6 +2,7 @@ package aiBot;
 
 import battlecode.common.*;
 
+//Not yet implemented
 public class Adverserial {
 	
 	private static RobotController rc;
