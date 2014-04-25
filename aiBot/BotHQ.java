@@ -99,7 +99,7 @@ public class BotHQ {
 	}
 	
 	/**
-	 * 
+	 * Spawns a new robot
 	 * @throws GameActionException
 	 */
 	private static void tryToSpawn() throws GameActionException {
