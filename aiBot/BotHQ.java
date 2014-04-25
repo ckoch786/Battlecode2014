@@ -7,13 +7,18 @@ public class BotHQ {
 	public static RobotController rc;
 	static MapLocation targetedPastr;
 	
+	/**
+	 * 
+	 * @param rcin
+	 * @throws GameActionException
+	 */
 	public static void init(RobotController rcin) throws GameActionException{
 		rc = rcin;
-		rc.broadcast(101,VectorFunctions.locToInt(VectorFunctions.mldivide(rc.senseHQLocation(),RobotPlayer.bigBoxSize)));//this tells soldiers to stay near HQ to start
+		rc.broadcast(101,VectorFunctions.locToInt(VectorFunctions.mldivide(rc.senseHQLocation(),RobotPlayer.BIG_BOX_SIZE)));//this tells soldiers to stay near HQ to start
 		rc.broadcast(102,-1);//and to remain in squad 1
 		tryToSpawn();
-		AStar.init(rc, RobotPlayer.bigBoxSize);
-		RobotPlayer.rallyPoint = VectorFunctions.mladd(VectorFunctions.mldivide(VectorFunctions.mlsubtract(rc.senseEnemyHQLocation(),rc.senseHQLocation()),3),rc.senseHQLocation());
+		AStar.init(rc, RobotPlayer.BIG_BOX_SIZE);
+		RobotPlayer.rallyPoint = VectorFunctions.mlsum(VectorFunctions.mldivide(VectorFunctions.mlsubtract(rc.senseEnemyHQLocation(),rc.senseHQLocation()),3),rc.senseHQLocation());
 	}
 	
 	public static void runHQ(RobotController rcin) throws GameActionException {
@@ -25,19 +30,19 @@ public class BotHQ {
 		//if my team is defeated, regroup at main base:
 		if(Clock.getRoundNum()>400&&alliedRobots.length<5){//call a retreat
 			MapLocation startPoint = findAverageAllyLocation(alliedRobots);
-			Broadcaster.findPathAndBroadcast(2,startPoint,rc.senseHQLocation(),RobotPlayer.bigBoxSize,2);
+			Broadcaster.findPathAndBroadcast(2,startPoint,rc.senseHQLocation(),RobotPlayer.BIG_BOX_SIZE,2);
 			RobotPlayer.rallyPoint = rc.senseHQLocation();
 		}else{//not retreating
 			//tell them to go to the rally point
-			Broadcaster.findPathAndBroadcast(1,rc.getLocation(),RobotPlayer.rallyPoint,RobotPlayer.bigBoxSize,2);
+			Broadcaster.findPathAndBroadcast(1,rc.getLocation(),RobotPlayer.rallyPoint,RobotPlayer.BIG_BOX_SIZE,2);
 
 			//if the enemy builds a pastr, tell sqaud 2 to go there.
 			MapLocation[] enemyPastrs = rc.sensePastrLocations(rc.getTeam().opponent());
-			if(enemyPastrs.length>0){
+			if(enemyPastrs.length > 0){
 				MapLocation startPoint = findAverageAllyLocation(alliedRobots);
 				targetedPastr = getNextTargetPastr(enemyPastrs,startPoint);
 				//broadcast it
-				Broadcaster.findPathAndBroadcast(2,startPoint,targetedPastr,RobotPlayer.bigBoxSize,2);
+				Broadcaster.findPathAndBroadcast(2,startPoint,targetedPastr,RobotPlayer.BIG_BOX_SIZE,2);
 			}
 		}
 		
@@ -53,20 +58,33 @@ public class BotHQ {
 		//after telling them where to go, consider spawning
 		tryToSpawn();
 	}
+	
+	/**
+	 * Finds average location of a soldier 
+	 * @param alliedRobots
+	 * @return
+	 * @throws GameActionException
+	 */
 	private static MapLocation findAverageAllyLocation(Robot[] alliedRobots) throws GameActionException {
-		//find average soldier location
+		
 		MapLocation[] alliedRobotLocations = VectorFunctions.robotsToLocations(alliedRobots, rc, true);
 		MapLocation startPoint;
-		if(alliedRobotLocations.length>0){
+		if(alliedRobotLocations.length > 0){
 			startPoint = VectorFunctions.meanLocation(alliedRobotLocations);
-			if(Clock.getRoundNum()%100==0)//update rally point from time to time
-				RobotPlayer.rallyPoint=startPoint;
+			if(Clock.getRoundNum() % 100 == 0)//update rally point from time to time
+				RobotPlayer.rallyPoint = startPoint;
 		}else{
 			startPoint = rc.senseHQLocation();
 		}
 		return startPoint;
 	}
 
+	/**
+	 * Finds the next enemy pastr to attack
+	 * @param enemyPastrs
+	 * @param startPoint
+	 * @return
+	 */
 	private static MapLocation getNextTargetPastr(MapLocation[] enemyPastrs,MapLocation startPoint) {
 		if(enemyPastrs.length==0)
 			return null;
@@ -79,8 +97,13 @@ public class BotHQ {
 		}//if the targeted pastr has been destroyed, then get a new one
 		return VectorFunctions.findClosest(enemyPastrs, startPoint);
 	}
-	public static void tryToSpawn() throws GameActionException {
-		if(rc.isActive()&&rc.senseRobotCount()<GameConstants.MAX_ROBOTS){
+	
+	/**
+	 * 
+	 * @throws GameActionException
+	 */
+	private static void tryToSpawn() throws GameActionException {
+		if(rc.isActive() && rc.senseRobotCount() < GameConstants.MAX_ROBOTS){
 			for(int i=0;i<8;i++){
 				Direction trialDir = RobotPlayer.allDirections[i];
 				if(rc.canMove(trialDir)){

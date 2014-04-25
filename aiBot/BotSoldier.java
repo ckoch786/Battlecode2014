@@ -13,6 +13,11 @@ public class BotSoldier {
 	static int myBand = 100;
 	static int pathCreatedRound = -1;
 	
+	/**
+	 * 
+	 * @param rcin
+	 * @throws GameActionException
+	 */
 	public static void runSoldier(RobotController rcin) throws GameActionException {
 		//follow orders from HQ
 		rc = rcin;
@@ -51,7 +56,7 @@ public class BotSoldier {
 		}
 		if(path.size()>0){
 			//follow breadthFirst path...
-			Direction bdir = AStar.getNextDirection(path, RobotPlayer.bigBoxSize);
+			Direction bdir = AStar.getNextDirection(path, RobotPlayer.BIG_BOX_SIZE);
 			//...except if you are getting too far from your allies
 			MapLocation[] alliedRobotLocations = VectorFunctions.robotsToLocations(alliedRobots, rc, true);
 			if(alliedRobotLocations.length>0){
@@ -69,7 +74,7 @@ public class BotSoldier {
 			MapLocation[] alliedPastrs =rc.sensePastrLocations(rc.getTeam());
 			if(alliedPastrs.length<5&&(rc.readBroadcast(50)+60<Clock.getRoundNum())){//no allied robot can be building a pastr at the same time
 				for(int i=0;i<20;i++){
-					MapLocation checkLoc = VectorFunctions.mladd(rc.getLocation(),new MapLocation(rand.nextInt(8)-4,rand.nextInt(8)-4));
+					MapLocation checkLoc = VectorFunctions.mlsum(rc.getLocation(),new MapLocation(rand.nextInt(8)-4,rand.nextInt(8)-4));
 					if(rc.canSenseSquare(checkLoc)){
 						double numberOfCows = rc.senseCowsAtLocation(checkLoc);
 						if(numberOfCows>1000){//there must be a lot of cows there

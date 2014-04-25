@@ -32,7 +32,7 @@ public class Pathing {
 	}
 	
 	public static boolean closeToEnemyHQ(MapLocation loc){
-		return RobotPlayer.enemyHQ.distanceSquaredTo(loc)<=RobotType.HQ.attackRadiusMaxSquared;
+		return RobotPlayer.enemyHQLocation.distanceSquaredTo(loc) <= RobotType.HQ.attackRadiusMaxSquared;
 	}
 	
 	public static void tryToMove(Direction chosenDirection,boolean selfAvoiding,boolean avoidEnemyHQ, boolean sneak) throws GameActionException{

@@ -6,12 +6,10 @@ import battlecode.common.*;
 
 public class Broadcaster{
 	
-	static RobotController rc;
-	static int[] lengthOfEachPath = new int[100];
+	private static RobotController rc;
+	private static int[] lengthOfEachPath = new int[100];
 	
-	public static void init(RobotController rcIn){
-		rc = rcIn;
-	}
+	
 	public static ArrayList<MapLocation> downloadPath() throws GameActionException {
 		ArrayList<MapLocation> downloadedPath = new ArrayList<MapLocation>();
 		int locationInt = rc.readBroadcast(BotSoldier.myBand+1);
@@ -42,4 +40,12 @@ public class Broadcaster{
 		}
 	}
 	
+	public static RobotController getRc() {
+		return rc;
+	}
+	
+	
+	public static void setRc(RobotController rc) {
+		Broadcaster.rc = rc;
+	}
 }
